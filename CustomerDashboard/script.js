@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 patientSex: details.sex,
             };
 
-            const response = await axios.post('http://localhost:3001/patient/appointments', newAppointment);
+            const response = await axios.post('https://medicare-backend-two.vercel.app/patient/appointments', newAppointment);
             if (response.status === 201) {
                 appointments.push(newAppointment);
                 // renderAppointments();

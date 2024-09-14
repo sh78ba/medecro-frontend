@@ -519,15 +519,7 @@
             }
         });
 
-        // Appointments
-    // Fetch and display appointments on page load (you can adjust this with real API data)
-    // const appointments = [
-    //     { id: 1, name: "John Doe", time: "10:00 AM", reason: "Annual Checkup", status: "pending" },
-    //     { id: 2, name: "Jane Smith", time: "11:30 AM", reason: "Follow-up", status: "pending" },
-    //     { id: 3, name: "Bob Johnson", time: "2:00 PM", reason: "Vaccination", status: "pending" },
-    //     { id: 4, name: "Alice Brown", time: "3:30 PM", reason: "Consultation", status: "pending" }
-    // ];
-
+    
     function renderAppointments() {
         const appointmentsList = document.getElementById('appointmentsList');
         appointmentsList.innerHTML = appointments.map(app => `
@@ -552,7 +544,7 @@
     // Confirm Appointment
 function confirmAppointment(id) {
     alert(id);
-    axios.post(`http://localhost:3001/appointments/confirm/${id}`)
+    axios.post(`https://medicare-backend-two.vercel.app/appointments/confirm/${id}`)
         .then(response => {
             alert(response.data.message);
             // Optionally re-fetch appointments to update the UI
@@ -565,7 +557,7 @@ function confirmAppointment(id) {
 
 // Cancel Appointment
 function cancelAppointment(id) {
-    axios.post(`http://localhost:3001/appointments/cancel/${id}`)
+    axios.post(`https://medicare-backend-two.vercel.app/appointments/cancel/${id}`)
         .then(response => {
             alert(response.data.message);
             // Optionally re-fetch appointments to update the UI
@@ -580,7 +572,7 @@ function cancelAppointment(id) {
 function rescheduleAppointment(id) {
     const newDate = prompt("Enter the new date for the appointment (YYYY-MM-DD):");
     if (newDate) {
-        axios.post(`http://localhost:3001/appointments/reschedule/${id}`, { newDate })
+        axios.post(`https://medicare-backend-two.vercel.app/appointments/reschedule/${id}`, { newDate })
             .then(response => {
                 alert(response.data.message);
                 // Optionally re-fetch appointments to update the UI

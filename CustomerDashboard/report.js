@@ -89,7 +89,7 @@ async function fetchAppointments() {
         }
         console.log('Fetching appointments for email:', email);
 
-        const response = await axios.get('http://localhost:3001/patient/getallappointments', {
+        const response = await axios.get('https://medicare-backend-two.vercel.app/patient/getallappointments', {
             params: { email } // Correctly use email variable
         });
 
