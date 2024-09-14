@@ -242,7 +242,7 @@ window.onload = function() {
                 cardIcon.innerHTML = "<i class='bx bx-file'></i>";
 
                 const reportTitle = document.createElement('h3');
-                reportTitle.innerText = report.title; // Replace 'title' with actual key
+                reportTitle.innerText = "Report"; // Replace 'title' with actual key
 
                 const reportDate = document.createElement('p');
                 reportDate.innerText = `Date: ${new Date(report.date).toLocaleDateString()}`; // Assuming 'date' is a valid field
@@ -266,6 +266,72 @@ window.onload = function() {
         })
         .catch(error => {
             console.error('Error fetching reports:', error);
+        });
+    } else {
+        console.error('No email found in localStorage');
+    }
+};
+
+
+
+
+
+
+// Axios call to fetch upcoming appointments using email from localStorage
+window.onload = function() {
+    // Retrieve email from localStorage
+    const email = localStorage.getItem('email');
+
+    if (email) {
+        axios.get('https://medicare-backend-two.vercel.app/patient/getallappointments', {
+            params: { email } // Send email as a query parameter
+        })
+        .then(response => {
+            const appointments = response.data; // Assuming the response contains an array of appointment objects
+            const appointmentContainer = document.getElementById('appointment-card-container');
+
+            // Clear the container before rendering
+            appointmentContainer.innerHTML = '';
+
+            // Get today's date to filter upcoming appointments
+            const today = new Date();
+
+            // Filter upcoming appointments
+            const upcomingAppointments = appointments.filter(appointment => {
+                const appointmentDate = new Date(appointment.date);
+                return appointmentDate >= today;
+            });
+
+            // Loop through each upcoming appointment and dynamically create cards
+            upcomingAppointments.forEach(appointment => {
+                const appointmentCard = document.createElement('div');
+                appointmentCard.classList.add('card');
+
+                const cardIcon = document.createElement('div');
+                cardIcon.classList.add('card-icon');
+                cardIcon.innerHTML = "<i class='bx bx-calendar'></i>";
+
+                const appointmentTitle = document.createElement('h3');
+                appointmentTitle.innerText = `${appointment.doctor} - ${appointment.specialty}`;
+
+                const appointmentDate = document.createElement('p');
+                appointmentDate.innerText = `Date: ${new Date(appointment.date).toLocaleDateString()}`;
+
+                const appointmentTime = document.createElement('p');
+                appointmentTime.innerText = `Time: ${appointment.time}`;
+
+                // Append elements to the card
+                appointmentCard.appendChild(cardIcon);
+                appointmentCard.appendChild(appointmentTitle);
+                appointmentCard.appendChild(appointmentDate);
+                appointmentCard.appendChild(appointmentTime);
+
+                // Append the card to the container
+                appointmentContainer.appendChild(appointmentCard);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching appointments:', error);
         });
     } else {
         console.error('No email found in localStorage');
