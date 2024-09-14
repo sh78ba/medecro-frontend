@@ -216,10 +216,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-// Axios call to fetch appointments (reports)
+// Axios call to fetch appointments (reports) using email from localStorage
 window.onload = function() {
-    axios.get('https://medicare-backend-two.vercel.app/patient/getallappointments')
+    // Retrieve email from localStorage
+    const email = localStorage.getItem('email');
+
+    if (email) {
+        axios.get('https://medicare-backend-two.vercel.app/patient/getallappointments', {
+            params: { email } // Send email as a query parameter
+        })
         .then(response => {
             const reports = response.data; // Assuming the response contains an array of report objects
             const reportContainer = document.getElementById('report-card-container');
@@ -246,7 +251,7 @@ window.onload = function() {
                 viewButton.classList.add('view-report');
                 viewButton.innerText = 'View Report';
                 viewButton.onclick = function() {
-                    window.open(report.report, '_blank'); // Assuming 'link' contains the report URL
+                    window.open(report.report, '_blank'); // Assuming 'report' contains the report URL
                 };
 
                 // Append elements to the card
@@ -262,4 +267,7 @@ window.onload = function() {
         .catch(error => {
             console.error('Error fetching reports:', error);
         });
+    } else {
+        console.error('No email found in localStorage');
+    }
 };
