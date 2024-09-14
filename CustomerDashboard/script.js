@@ -211,8 +211,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
 });
+
+
 
 window.onload = function() {
     // Retrieve email from localStorage
@@ -269,7 +270,7 @@ window.onload = function() {
                 appointmentContainer.appendChild(appointmentCard);
             });
 
-            // Render reports (assuming reports are part of the same data structure)
+            // Render reports
             appointments.forEach(report => {
                 const reportCard = document.createElement('div');
                 reportCard.classList.add('card');
@@ -287,9 +288,17 @@ window.onload = function() {
                 const viewButton = document.createElement('button');
                 viewButton.classList.add('view-report');
                 viewButton.innerText = 'View Report';
-                viewButton.onclick = function() {
-                    window.open(report.report, '_blank'); // Assuming 'report' contains the report URL
-                };
+
+                // Check if report.report is null
+                if (report.report) {
+                    viewButton.onclick = function() {
+                        window.open(report.report, '_blank'); // Assuming 'report' contains the report URL
+                    };
+                } else {
+                    viewButton.onclick = function() {
+                        alert('No report available for this appointment.');
+                    };
+                }
 
                 // Append elements to the card
                 reportCard.appendChild(cardIcon);
