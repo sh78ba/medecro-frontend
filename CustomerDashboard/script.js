@@ -214,84 +214,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-
-
-// Axios call to fetch appointments (reports) using email from localStorage
 window.onload = function() {
     // Retrieve email from localStorage
     const email = localStorage.getItem('email');
 
     if (email) {
-        axios.get('https://medicare-backend-two.vercel.app/patient/getallappointments', {
-            params: { email } // Send email as a query parameter
-        })
-        .then(response => {
-            const reports = response.data; // Assuming the response contains an array of report objects
-            const reportContainer = document.getElementById('report-card-container');
-
-            // Clear the container before rendering
-            reportContainer.innerHTML = '';
-
-            // Loop through each report and dynamically create cards
-            reports.forEach(report => {
-                const reportCard = document.createElement('div');
-                reportCard.classList.add('card');
-
-                const cardIcon = document.createElement('div');
-                cardIcon.classList.add('card-icon');
-                cardIcon.innerHTML = "<i class='bx bx-file'></i>";
-
-                const reportTitle = document.createElement('h3');
-                reportTitle.innerText = "Report"; // Replace 'title' with actual key
-
-                const reportDate = document.createElement('p');
-                reportDate.innerText = `Date: ${new Date(report.date).toLocaleDateString()}`; // Assuming 'date' is a valid field
-
-                const viewButton = document.createElement('button');
-                viewButton.classList.add('view-report');
-                viewButton.innerText = 'View Report';
-                viewButton.onclick = function() {
-                    window.open(report.report, '_blank'); // Assuming 'report' contains the report URL
-                };
-
-                // Append elements to the card
-                reportCard.appendChild(cardIcon);
-                reportCard.appendChild(reportTitle);
-                reportCard.appendChild(reportDate);
-                reportCard.appendChild(viewButton);
-
-                // Append the card to the container
-                reportContainer.appendChild(reportCard);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching reports:', error);
-        });
-    } else {
-        console.error('No email found in localStorage');
-    }
-};
-
-
-
-
-
-
-// Axios call to fetch upcoming appointments using email from localStorage
-window.onload = function() {
-    // Retrieve email from localStorage
-    const email = localStorage.getItem('email');
-
-    if (email) {
+        // Fetch upcoming appointments
         axios.get('https://medicare-backend-two.vercel.app/patient/getallappointments', {
             params: { email } // Send email as a query parameter
         })
         .then(response => {
             const appointments = response.data; // Assuming the response contains an array of appointment objects
             const appointmentContainer = document.getElementById('appointment-card-container');
+            const reportContainer = document.getElementById('report-card-container');
 
-            // Clear the container before rendering
+            // Clear the containers before rendering
             appointmentContainer.innerHTML = '';
+            reportContainer.innerHTML = '';
 
             // Get today's date to filter upcoming appointments
             const today = new Date();
@@ -329,9 +268,41 @@ window.onload = function() {
                 // Append the card to the container
                 appointmentContainer.appendChild(appointmentCard);
             });
+
+            // Render reports (assuming reports are part of the same data structure)
+            appointments.forEach(report => {
+                const reportCard = document.createElement('div');
+                reportCard.classList.add('card');
+
+                const cardIcon = document.createElement('div');
+                cardIcon.classList.add('card-icon');
+                cardIcon.innerHTML = "<i class='bx bx-file'></i>";
+
+                const reportTitle = document.createElement('h3');
+                reportTitle.innerText = "Report"; // Replace 'title' with actual key
+
+                const reportDate = document.createElement('p');
+                reportDate.innerText = `Date: ${new Date(report.date).toLocaleDateString()}`; // Assuming 'date' is a valid field
+
+                const viewButton = document.createElement('button');
+                viewButton.classList.add('view-report');
+                viewButton.innerText = 'View Report';
+                viewButton.onclick = function() {
+                    window.open(report.report, '_blank'); // Assuming 'report' contains the report URL
+                };
+
+                // Append elements to the card
+                reportCard.appendChild(cardIcon);
+                reportCard.appendChild(reportTitle);
+                reportCard.appendChild(reportDate);
+                reportCard.appendChild(viewButton);
+
+                // Append the card to the container
+                reportContainer.appendChild(reportCard);
+            });
         })
         .catch(error => {
-            console.error('Error fetching appointments:', error);
+            console.error('Error fetching appointments/reports:', error);
         });
     } else {
         console.error('No email found in localStorage');
